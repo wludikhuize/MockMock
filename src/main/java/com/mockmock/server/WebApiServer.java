@@ -10,7 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.stereotype.Service;
 
 @Service
-public class WebApiServer implements com.mockmock.server.Server {
+public class WebApiServer implements Server {
     private int port;
 
     private Settings settings;
@@ -20,9 +20,17 @@ public class WebApiServer implements com.mockmock.server.Server {
     }
 
     public void start() {
-        SpringApplication app = new SpringApplication(AppStarter.class);
-        app.setDefaultProperties(Collections.singletonMap("server.port", (Object) this.port));
-        app.run();
+        try
+        {
+            System.out.println("Starting MockMock API on port " + this.port);
+            SpringApplication app = new SpringApplication(AppStarter.class);
+            app.setDefaultProperties(Collections.singletonMap("server.port", (Object) this.port));
+            app.run();
+        }
+        catch (Exception e)
+        {
+            System.err.println("Could not start MockMock. Maybe port " + port + " is already in use?");
+        }        
     }
 
     @Autowired
