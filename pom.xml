@@ -49,7 +49,7 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.dstovall</groupId>
+                <groupId>com.jolira</groupId>
                 <artifactId>onejar-maven-plugin</artifactId>
                 <version>1.4.4</version>
                 <executions>
@@ -100,7 +100,7 @@
     <pluginRepositories>
         <pluginRepository>
             <id>onejar-maven-plugin.googlecode.com</id>
-            <url>http://onejar-maven-plugin.googlecode.com/svn/mavenrepo</url>
+            <url>https://mvnrepository.com/artifact/com.jolira/onejar-maven-plugin</url>
         </pluginRepository>
     </pluginRepositories>
 
@@ -220,11 +220,11 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${spring.boot.version}</version>
             <exclusions>
-    <exclusion>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-logging</artifactId>
-    </exclusion>
-  </exclusions>
+                <exclusion>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         
         <dependency>
@@ -233,11 +233,11 @@
             <version>${spring.boot.version}</version>
             <scope>test</scope>
             <exclusions>
-    <exclusion>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-logging</artifactId>
-    </exclusion>
-  </exclusions>
+                <exclusion>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
      
