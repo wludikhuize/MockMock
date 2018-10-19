@@ -1,10 +1,12 @@
 package com.mockmock.controllers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,6 +55,7 @@ public class InboxController {
         String to = searchParameters.getTo();
         String subject = searchParameters.getSubject();
         String content = searchParameters.getContent();
+        Date dateFrom = searchParameters.getDateFrom();
 
         if (id != null) {
             stream = stream.filter(mail -> mail.getId() == id);
@@ -82,6 +85,13 @@ public class InboxController {
                 } else {
                     return false;
                 }
+            });
+        }
+
+        if (dateFrom != null) {
+            stream = stream.filter(mail -> {
+                long timeStampFrom = new DateTime(dateFrom).getMillis();
+                return mail.getReceivedTime() > timeStampFrom;
             });
         }
 

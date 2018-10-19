@@ -1,11 +1,14 @@
 package com.mockmock.controllers.model;
 
+import java.util.Date;
+
 public class SearchParameters {
     private Long id;
     private String from;
     private String to;
     private String subject;
     private String content;
+    private Date dateFrom;
 
     public Long getId() {
         return id;
@@ -45,5 +48,13 @@ public class SearchParameters {
 
     public String getContent() {
         return this.content;
+    }
+
+    public Date getDateFrom() {
+        return dateFrom;
+    }
+
+    public void setDateFrom(Date dateFrom) {
+        this.dateFrom = dateFrom;
     }
 }

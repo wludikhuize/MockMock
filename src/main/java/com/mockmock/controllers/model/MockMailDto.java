@@ -1,10 +1,8 @@
 package com.mockmock.controllers.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.stream.Collectors;
-
-import javax.mail.internet.MimeMessage;
-
 import com.mockmock.mail.MockMail;
 
 public class MockMailDto {
@@ -12,7 +10,8 @@ public class MockMailDto {
     private String from;
     private String to;
     private String subject;
-    private long receivedTime;
+    private long receivedTimeStamp;
+    private Date receivedTime;
 
     public long getId() {
         return id;
@@ -46,11 +45,19 @@ public class MockMailDto {
         this.subject = subject;
     }
 
-    public long getReceivedTime() {
+    public long getReceivedTimeStamp() {
+        return receivedTimeStamp;
+    }
+
+    public void setReceivedTimeStamp(long receivedTimeStamp) {
+        this.receivedTimeStamp = receivedTimeStamp;
+    }
+
+    public Date getReceivedTime() {
         return receivedTime;
     }
 
-    public void setReceivedTime(long receivedTime) {
+    public void setReceivedTime(Date receivedTime) {
         this.receivedTime = receivedTime;
     }
 
@@ -61,8 +68,8 @@ public class MockMailDto {
         result.from = mockMail.getFrom();
         result.to = mockMail.getTo();
         result.subject = mockMail.getSubject();
-        result.receivedTime = mockMail.getReceivedTime();
-
+        result.setReceivedTimeStamp(mockMail.getReceivedTime());
+        result.setReceivedTime(new Date(mockMail.getReceivedTime()));
         return result;
     }
 
