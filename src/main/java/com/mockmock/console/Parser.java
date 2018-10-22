@@ -19,7 +19,7 @@ public class Parser {
         Options options = new Options();
         options.addOption("p", true, "The mail port number to use. Default is 25.");
         options.addOption("h", true, "The http port number to use. Default is 8282.");
-        options.addOption("w", true, "The webapi port number to use. Default is 8283.");
+        options.addOption("w", true, "The web api port number to use. Default is 8283.");
         options.addOption("m", true, "The maximum size of the mail qeueue. Default is 1000.");
         options.addOption("c", true, "Comma separated list of channels. Default is #postman.");
         options.addOption("ff", true, "Filters out from email addresses (comma separated).");
