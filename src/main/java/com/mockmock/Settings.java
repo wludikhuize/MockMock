@@ -110,4 +110,49 @@ public class Settings {
     public void setStaticFolderPath(String staticFolderPath) {
         this.staticFolderPath = staticFolderPath;
     }
+
+    // Forwar to server settings
+    private String forwardServer = "";
+    private String forwardServerDomain = "";
+    private String forwardServerUserName = "";
+    private String forwardServerPassword = "";
+    private String forwardEmailAdress = "";
+
+    public String getForwardServer() {
+        return this.forwardServer;
+    }
+    public void setForwardServer(String value) {
+        this.forwardServer = value;
+    }
+
+    public String getForwardServerDomain() {
+        return this.forwardServerDomain;
+    }
+    public void setforwardServerDomain(String value) {
+        this.forwardServerDomain = value;
+    }
+
+    public String getForwardServerUserName() {
+        return this.forwardServerUserName;
+    }
+    public void setForwardServerUserName(String value) {
+        this.forwardServerUserName = value;
+    }
+
+    public String getForwardServerPassword() {
+        return this.forwardServerPassword;
+    }
+    public void setForwardServerPassword(String value) {
+        this.forwardServerPassword = value;
+    }
+
+    public String getForwardEmailAdress() {
+        return this.forwardEmailAdress;
+    }
+    public void setForwardEmailAdress(String value) {
+        this.forwardEmailAdress = value;
+    }
+
+
+
 }

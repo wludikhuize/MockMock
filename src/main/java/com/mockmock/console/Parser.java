@@ -27,6 +27,13 @@ public class Parser
         options.addOption("ft", true, "Filters out to email addresses (comma separated).");
         options.addOption("s", true, "Full path to the folder containing the static files like images and css.");
         options.addOption("ec", false, "Turns on emails printing to console. Default off");
+
+        options.addOption("fwS", true, "Forward server");
+        options.addOption("fwD", true, "Forward server domain");
+        options.addOption("fwU", true, "Forward server UserName");
+        options.addOption("fwP", true, "Forward server Password");
+        options.addOption("fwE", true, "Forward email adres");
+
         options.addOption("?", false, "Shows this help information.");
 
         // parse the given arguments
@@ -50,6 +57,13 @@ public class Parser
 			parseFilterFromEmailAddressesOption(cmd, settings);
 			parseFilterToEmailAddressesOption(cmd, settings);
             parseStaticFolderOption(cmd, settings);
+
+            // Forward server settings
+            parseForwardServerOption(cmd, settings);
+            parseForwardServerDomainOption(cmd, settings);
+            parseForwardServerUserNameOption(cmd, settings);
+            parseForwardServerPasswordOption(cmd, settings);
+            parseForwardEmailAdressOption(cmd, settings);
         }
         catch (ParseException e)
         {
@@ -147,4 +161,44 @@ public class Parser
             settings.setStaticFolderPath(cmd.getOptionValue("s"));
         }
     }
+
+    protected void parseForwardServerOption(CommandLine cmd, Settings settings)
+    {
+        if(cmd.hasOption("fwS"))
+        {
+            settings.setForwardServer(cmd.getOptionValue("fwS"));
+        }
+    }
+
+    protected void parseForwardServerDomainOption(CommandLine cmd, Settings settings)
+    {
+        if(cmd.hasOption("fwD"))
+        {
+            settings.setforwardServerDomain(cmd.getOptionValue("fwD"));
+        }
+    }
+    
+    protected void parseForwardServerUserNameOption(CommandLine cmd, Settings settings)
+    {
+        if(cmd.hasOption("fwU"))
+        {
+            settings.setForwardServerUserName(cmd.getOptionValue("fwU"));
+        }
+    }
+    
+    protected void parseForwardServerPasswordOption(CommandLine cmd, Settings settings)
+    {
+        if(cmd.hasOption("fwP"))
+        {
+            settings.setForwardServerPassword(cmd.getOptionValue("fwP"));
+        }
+    }
+    
+    protected void parseForwardEmailAdressOption(CommandLine cmd, Settings settings)
+    {
+        if(cmd.hasOption("fwE"))
+        {
+            settings.setForwardEmailAdress(cmd.getOptionValue("fwE"));
+        }
+    }    
 }
