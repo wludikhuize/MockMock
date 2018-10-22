@@ -25,7 +25,7 @@ public class Settings {
     /**
      * The default port for the web api
      */
-    private int webApiPort = 8080;
+    private int webApiPort = 8283;
 
     /**
      * The maximum size the mail queue may be
