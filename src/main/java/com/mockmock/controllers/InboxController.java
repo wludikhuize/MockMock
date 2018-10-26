@@ -1,5 +1,6 @@
 package com.mockmock.controllers;
 
+import java.util.regex.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
@@ -70,18 +71,21 @@ public class InboxController {
         }
 
         if (subject != null) {
-            stream = stream.filter(mail -> mail.getSubject().contains(subject));
+            Pattern p = Pattern.compile(subject, Pattern.CASE_INSENSITIVE);
+            stream = stream.filter(mail -> p.matcher(mail.getSubject()).find());
         }
 
         if (content != null) {
+            Pattern p = Pattern.compile(content, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+
             stream = stream.filter(mail -> {
                 String body = mail.getBody();
                 String bodyHtml = mail.getBodyHtml();
 
                 if (body != null) {
-                    return body.contains(content);
+                    return p.matcher(body).find();
                 } else if (bodyHtml != null) {
-                    return bodyHtml.contains(content);
+                    return p.matcher(bodyHtml).find();
                 } else {
                     return false;
                 }
