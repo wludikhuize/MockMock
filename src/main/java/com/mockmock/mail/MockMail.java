@@ -1,5 +1,8 @@
 package com.mockmock.mail;
 
+import java.util.Date;
+
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 public class MockMail implements Comparable<MockMail> {
@@ -93,6 +96,14 @@ public class MockMail implements Comparable<MockMail> {
 
     public void setMimeMessage(MimeMessage mimeMessage) {
         this.mimeMessage = mimeMessage;
+    }
+
+    public Date getSentDate() {
+        try {
+            return this.mimeMessage.getSentDate();
+        } catch (MessagingException e) {
+            return null;
+        }
     }
 
     @Override

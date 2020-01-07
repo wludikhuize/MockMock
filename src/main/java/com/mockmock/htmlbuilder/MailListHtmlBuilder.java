@@ -5,7 +5,10 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.springframework.stereotype.Service;
 
 import javax.mail.internet.MimeMessage;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 @Service
 public class MailListHtmlBuilder implements HtmlBuilder {
@@ -26,6 +29,7 @@ public class MailListHtmlBuilder implements HtmlBuilder {
                     + "! <small class=\"deleteLink\"><a class=\"delete\" href=\"/mail/delete/all\">Delete all</a></small></h1>\n";
             output += "  <table class=\"table table-striped\">\n";
             output += "    <thead>\n";
+            output += "      <th>Date sent</th>\n";
             output += "      <th>From</th>\n";
             output += "      <th>To</th>\n";
             output += "      <th>CC</th>\n";
@@ -46,6 +50,10 @@ public class MailListHtmlBuilder implements HtmlBuilder {
     }
 
     private String buildMailRow(MockMail mail) {
+        Date date = mail.getSentDate();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+        String dateOutput = formatter.format(date);
+
         StringFromHtmlBuilder fromBuilder = new StringFromHtmlBuilder();
         fromBuilder.setMockMail(mail);
         String fromOutput = fromBuilder.build();
@@ -69,10 +77,10 @@ public class MailListHtmlBuilder implements HtmlBuilder {
             subjectOutput = StringEscapeUtils.escapeHtml(mail.getSubject());
         }
 
-        return "<tr>\n" + "  <td>" + fromOutput + "</td>\n" + "  <td>" + toOutput + "</td>\n" + "  <td>" + ccOutput
-                + "</td>\n" + "  <td><a title=\"" + StringEscapeUtils.escapeHtml(mail.getSubject()) + "\" href=\"/view/"
-                + mail.getId() + "\">" + subjectOutput + "</a></td>\n"
-                + "  <td><a title=\"Delete this mail\" href=\"/delete/" + mail.getId() + "\"><em>Delete</em></a></td>\n"
-                + "</tr>";
+        return "<tr>\n" + "  <td>" + dateOutput + "</td>\n" + " <td>" + fromOutput + "</td>\n" + "  <td>" + toOutput
+                + "</td>\n" + "  <td>" + ccOutput + "</td>\n" + "  <td><a title=\""
+                + StringEscapeUtils.escapeHtml(mail.getSubject()) + "\" href=\"/view/" + mail.getId() + "\">"
+                + subjectOutput + "</a></td>\n" + "  <td><a title=\"Delete this mail\" href=\"/delete/" + mail.getId()
+                + "\"><em>Delete</em></a></td>\n" + "</tr>";
     }
 }
