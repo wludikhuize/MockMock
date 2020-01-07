@@ -6,6 +6,8 @@ public class SearchParameters {
     private Long id;
     private String from;
     private String to;
+    private String cc;
+    private String bcc;
     private String subject;
     private String content;
     private Date dateFrom;
@@ -26,6 +28,14 @@ public class SearchParameters {
         this.to = to;
     }
 
+    public void setCC(String cc) {
+        this.cc = cc;
+    }
+
+    public void setBCC(String bcc) {
+        this.bcc = bcc;
+    }
+
     public void setSubject(String subject) {
         this.subject = subject;
     }
@@ -40,6 +50,14 @@ public class SearchParameters {
 
     public String getTo() {
         return this.to;
+    }
+
+    public String getCC() {
+        return this.cc;
+    }
+
+    public String getBCC() {
+        return this.bcc;
     }
 
     public String getSubject() {

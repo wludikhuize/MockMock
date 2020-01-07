@@ -5,7 +5,9 @@ import javax.mail.internet.MimeMessage;
 public class MockMail implements Comparable<MockMail> {
     private long id;
     private String from;
-    private String to;
+    private String[] to;
+    private String[] cc;
+    private String[] bcc;
     private String subject;
     private String body;
     private String bodyHtml;
@@ -29,12 +31,28 @@ public class MockMail implements Comparable<MockMail> {
         this.from = from;
     }
 
-    public String getTo() {
+    public String[] getTo() {
         return to;
     }
 
-    public void setTo(String to) {
+    public void setTo(String[] to) {
         this.to = to;
+    }
+
+    public String[] getCC() {
+        return cc;
+    }
+
+    public void setCC(String[] cc) {
+        this.cc = cc;
+    }
+
+    public String[] getBCC() {
+        return bcc;
+    }
+
+    public void setBCC(String[] bcc) {
+        this.bcc = bcc;
     }
 
     public String getSubject() {

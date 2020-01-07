@@ -2,6 +2,7 @@ package com.mockmock.controllers;
 
 import java.util.regex.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
@@ -31,32 +32,34 @@ public class InboxController {
 
     @GetMapping("/inbox")
     public ArrayList<MockMailDto> inbox() {
-        ArrayList<MockMail> inbox = mailQueue.getMailQueue();
+        final ArrayList<MockMail> inbox = mailQueue.getMailQueue();
 
         return MockMailDto.mapFrom(inbox);
     }
 
     @GetMapping("/inbox/{id}")
-    public MockMailDto inbox(@PathVariable long id) {
-        ArrayList<MockMail> inbox = mailQueue.getMailQueue();
+    public MockMailDto inbox(@PathVariable final long id) {
+        final ArrayList<MockMail> inbox = mailQueue.getMailQueue();
 
-        MockMail foundMail = inbox.stream().filter(mail -> mail.getId() == id).findAny().orElse(null);
+        final MockMail foundMail = inbox.stream().filter(mail -> mail.getId() == id).findAny().orElse(null);
 
         return MockMailDto.mapFrom(foundMail);
     }
 
     @PutMapping("/inbox/find")
-    public ArrayList<MockMailDto> find(@RequestBody SearchParameters searchParameters) {
-        ArrayList<MockMail> inbox = mailQueue.getMailQueue();
+    public ArrayList<MockMailDto> find(@RequestBody final SearchParameters searchParameters) {
+        final ArrayList<MockMail> inbox = mailQueue.getMailQueue();
 
         Stream<MockMail> stream = inbox.stream();
 
-        Long id = searchParameters.getId();
-        String from = searchParameters.getFrom();
-        String to = searchParameters.getTo();
-        String subject = searchParameters.getSubject();
-        String content = searchParameters.getContent();
-        Date dateFrom = searchParameters.getDateFrom();
+        final Long id = searchParameters.getId();
+        final String from = searchParameters.getFrom();
+        final String to = searchParameters.getTo();
+        final String cc = searchParameters.getCC();
+        final String bcc = searchParameters.getBCC();
+        final String subject = searchParameters.getSubject();
+        final String content = searchParameters.getContent();
+        final Date dateFrom = searchParameters.getDateFrom();
 
         if (id != null) {
             stream = stream.filter(mail -> mail.getId() == id);
@@ -67,20 +70,28 @@ public class InboxController {
         }
 
         if (to != null) {
-            stream = stream.filter(mail -> mail.getTo().contains(to));
+            stream = stream.filter(mail -> Arrays.asList(mail.getTo()).contains(to));
+        }
+
+        if (cc != null) {
+            stream = stream.filter(mail -> Arrays.asList(mail.getCC()).contains(cc));
+        }
+
+        if (bcc != null) {
+            stream = stream.filter(mail -> Arrays.asList(mail.getBCC()).contains(bcc));
         }
 
         if (subject != null) {
-            Pattern p = Pattern.compile(subject, Pattern.CASE_INSENSITIVE);
+            final Pattern p = Pattern.compile(subject, Pattern.CASE_INSENSITIVE);
             stream = stream.filter(mail -> p.matcher(mail.getSubject()).find());
         }
 
         if (content != null) {
-            Pattern p = Pattern.compile(content, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+            final Pattern p = Pattern.compile(content, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
             stream = stream.filter(mail -> {
-                String body = mail.getBody();
-                String bodyHtml = mail.getBodyHtml();
+                final String body = mail.getBody();
+                final String bodyHtml = mail.getBodyHtml();
 
                 if (body != null) {
                     return p.matcher(body).find();
@@ -94,18 +105,18 @@ public class InboxController {
 
         if (dateFrom != null) {
             stream = stream.filter(mail -> {
-                long timeStampFrom = new DateTime(dateFrom).getMillis();
+                final long timeStampFrom = new DateTime(dateFrom).getMillis();
                 return mail.getReceivedTime() > timeStampFrom;
             });
         }
 
-        ArrayList<MockMail> foundMails = (ArrayList<MockMail>) stream.collect(Collectors.toList());
+        final ArrayList<MockMail> foundMails = (ArrayList<MockMail>) stream.collect(Collectors.toList());
 
         return MockMailDto.mapFrom(foundMails);
     }
 
     @Autowired
-    public void setMailQueue(MailQueue mailQueue) {
+    public void setMailQueue(final MailQueue mailQueue) {
         this.mailQueue = mailQueue;
     }
 }
