@@ -113,12 +113,19 @@ public class MockMockMessageHandlerFactory implements MessageHandlerFactory {
                 mockMail.setMimeMessage(message);
 
                 Address[] to = message.getRecipients(Message.RecipientType.TO);
-                Address[] cc = message.getRecipients(Message.RecipientType.CC);
-                Address[] bcc = message.getRecipients(Message.RecipientType.BCC);
+                if (to != null && to.length > 0) {
+                    mockMail.setTo(addressesToStringArray(to));
+                }
 
-                mockMail.setTo(addressesToStringArray(to));
-                mockMail.setCC(addressesToStringArray(cc));
-                mockMail.setBCC(addressesToStringArray(bcc));
+                Address[] cc = message.getRecipients(Message.RecipientType.CC);
+                if (cc != null && cc.length > 0) {
+                    mockMail.setCC(addressesToStringArray(cc));
+                }
+
+                Address[] bcc = message.getRecipients(Message.RecipientType.BCC);
+                if (bcc != null && bcc.length > 0) {
+                    mockMail.setBCC(addressesToStringArray(bcc));
+                }
 
                 Object messageContent = message.getContent();
                 if (messageContent instanceof Multipart) {
