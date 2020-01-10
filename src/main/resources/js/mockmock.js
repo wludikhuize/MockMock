@@ -11,22 +11,22 @@ $(function () {
         event.preventDefault();
     });
 
-    var previousTimestamp = null;
-
     function checkForNewMail() {
-        setInterval(function () {
+        function checkRefresh() {
             $.ajax({
                 type: "POST",
                 url: "/mail/refresh"
             }).done(function (timestamp) {
-                if (previousTimestamp == null) {
-                    previousTimestamp = timestamp;
-                } else if (previousTimestamp < timestamp) {
+                if (previousTimestamp != timestamp) {
                     previousTimestamp = timestamp;
                     window.location = '/';
                 }
             });
-        }, 100);
+        }
+
+        setInterval(checkRefresh, 500);
+
+        checkRefresh();
     }
 
     if (window.location.pathname === "/") {

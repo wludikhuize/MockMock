@@ -1,7 +1,9 @@
 package com.mockmock.htmlbuilder;
 
+import com.mockmock.mail.MailQueue;
 import com.mockmock.mail.MockMail;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.mail.internet.MimeMessage;
@@ -15,7 +17,8 @@ public class MailListHtmlBuilder implements HtmlBuilder {
     private ArrayList<MockMail> mailQueue;
 
     public void setMailQueue(ArrayList<MockMail> mailQueue) {
-        this.mailQueue = mailQueue;
+        // create a shalow copy of the mailQueue to avoid getting concurrency exceptions
+        this.mailQueue = new ArrayList<MockMail>(mailQueue);
     }
 
     public String build() {
@@ -44,9 +47,19 @@ public class MailListHtmlBuilder implements HtmlBuilder {
             output += "  </table>\n";
         }
 
+        long lastTimeStamp = getLastTimestamp();
+
+        output += "<script type=\"text/javascript\">var previousTimestamp = '" + lastTimeStamp + "';</script>";
         output += "</div>\n";
 
         return output;
+    }
+
+    private long getLastTimestamp() {
+        if (mailQueue.size() == 0)
+            return 0;
+
+        return mailQueue.get(0).getReceivedTime();
     }
 
     private String buildMailRow(MockMail mail) {
