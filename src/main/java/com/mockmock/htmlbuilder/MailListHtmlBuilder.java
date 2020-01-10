@@ -29,7 +29,7 @@ public class MailListHtmlBuilder implements HtmlBuilder {
                     + "! <small class=\"deleteLink\"><a class=\"delete\" href=\"/mail/delete/all\">Delete all</a></small></h1>\n";
             output += "  <table class=\"table table-striped\">\n";
             output += "    <thead>\n";
-            output += "      <th>Date sent</th>\n";
+            output += "      <th>Date received</th>\n";
             output += "      <th>From</th>\n";
             output += "      <th>To</th>\n";
             output += "      <th>CC</th>\n";
@@ -50,8 +50,9 @@ public class MailListHtmlBuilder implements HtmlBuilder {
     }
 
     private String buildMailRow(MockMail mail) {
-        Date date = mail.getSentDate();
+        long receivedTimestamp = mail.getReceivedTime();
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+        Date date = new Date(receivedTimestamp);
         String dateOutput = formatter.format(date);
 
         StringFromHtmlBuilder fromBuilder = new StringFromHtmlBuilder();

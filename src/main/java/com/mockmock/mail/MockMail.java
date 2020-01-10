@@ -98,14 +98,6 @@ public class MockMail implements Comparable<MockMail> {
         this.mimeMessage = mimeMessage;
     }
 
-    public Date getSentDate() {
-        try {
-            return this.mimeMessage.getSentDate();
-        } catch (MessagingException e) {
-            return null;
-        }
-    }
-
     @Override
     public int compareTo(MockMail o) {
         long receivedTime = this.getReceivedTime();

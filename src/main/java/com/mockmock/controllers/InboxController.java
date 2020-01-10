@@ -30,6 +30,12 @@ public class InboxController {
 
     private MailQueue mailQueue;
 
+    @GetMapping("/inbox/last-received-time")
+    public long newestReceivedId() {
+        final MockMail lastMail = mailQueue.getLastSendMail();
+        return lastMail.getReceivedTime();
+    }
+
     @GetMapping("/inbox")
     public ArrayList<MockMailDto> inbox() {
         final ArrayList<MockMail> inbox = mailQueue.getMailQueue();
@@ -44,6 +50,16 @@ public class InboxController {
         final MockMail foundMail = inbox.stream().filter(mail -> mail.getId() == id).findAny().orElse(null);
 
         return MockMailDto.mapFrom(foundMail);
+    }
+
+    private boolean listContainsEmail(String[] emailaddresses, String emailAddressToFind) {
+        for (String emailaddress : emailaddresses) {
+            if (emailaddress.contains(emailAddressToFind)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @PutMapping("/inbox/find")
@@ -70,15 +86,15 @@ public class InboxController {
         }
 
         if (to != null) {
-            stream = stream.filter(mail -> Arrays.asList(mail.getTo()).contains(to));
+            stream = stream.filter(mail -> listContainsEmail(mail.getTo(), to));
         }
 
         if (cc != null) {
-            stream = stream.filter(mail -> Arrays.asList(mail.getCC()).contains(cc));
+            stream = stream.filter(mail -> listContainsEmail(mail.getCC(), cc));
         }
 
         if (bcc != null) {
-            stream = stream.filter(mail -> Arrays.asList(mail.getBCC()).contains(bcc));
+            stream = stream.filter(mail -> listContainsEmail(mail.getBCC(), bcc));
         }
 
         if (subject != null) {

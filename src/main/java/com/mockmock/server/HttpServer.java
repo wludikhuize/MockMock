@@ -13,8 +13,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 
 @Service
-public class HttpServer implements com.mockmock.server.Server
-{
+public class HttpServer implements com.mockmock.server.Server {
     private int port;
 
     private Settings settings;
@@ -22,27 +21,25 @@ public class HttpServer implements com.mockmock.server.Server
     private MailDetailHandler mailDetailHandler;
     private MailDetailHtmlHandler mailDetailHtmlHandler;
     private MailDeleteHandler mailDeleteHandler;
+    private RefreshHandler refreshHandler;
     private DeleteHandler deleteHandler;
     private MailForwardHandler mailForwardHandler;
 
-    public void setPort(int port)
-    {
+    public void setPort(int port) {
         this.port = port;
     }
 
-    public void start()
-    {
+    public void start() {
         Server http = new Server(port);
 
-        // get the path to the "static" folder. If it doesn't exists, check if it's in the folder of the file being executed.
+        // get the path to the "static" folder. If it doesn't exists, check if it's in
+        // the folder of the file being executed.
         String path = "./static";
-        if(settings.getStaticFolderPath() != null)
-        {
+        if (settings.getStaticFolderPath() != null) {
             path = settings.getStaticFolderPath();
         }
 
-        if( ! new File(path).exists())
-        {
+        if (!new File(path).exists()) {
             System.out.println("Path to static folder does not exist: " + path);
 
             // get the directory we're in
@@ -57,27 +54,18 @@ public class HttpServer implements com.mockmock.server.Server
         ResourceHandler resourceHandler = new ResourceHandler();
         resourceHandler.setResourceBase(path);
 
-        Handler[] handlers = {
-			this.indexHandler,
-			this.mailDetailHandler,
-			this.mailDetailHtmlHandler,
-			this.mailDeleteHandler,
-            this.deleteHandler,
-            this.mailForwardHandler,
-			resourceHandler
-        };
+        Handler[] handlers = { this.indexHandler, this.mailDetailHandler, this.mailDetailHtmlHandler,
+                this.mailDeleteHandler, this.deleteHandler, this.refreshHandler, this.mailForwardHandler,
+                resourceHandler };
         HandlerList handlerList = new HandlerList();
         handlerList.setHandlers(handlers);
         http.setHandler(handlerList);
 
-        try
-        {
+        try {
             System.out.println("Starting http server on port " + port);
             http.start();
             http.join();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             System.err.println("Could not start http server. Maybe port " + port + " is already in use?");
         }
     }
@@ -87,31 +75,35 @@ public class HttpServer implements com.mockmock.server.Server
         this.indexHandler = indexHandler;
     }
 
-	@Autowired
-	public void setMailDetailHandler(MailDetailHandler mailDetailHandler) {
-		this.mailDetailHandler = mailDetailHandler;
-	}
+    @Autowired
+    public void setMailDetailHandler(MailDetailHandler mailDetailHandler) {
+        this.mailDetailHandler = mailDetailHandler;
+    }
 
-	@Autowired
-	public void setMailDetailHtmlHandler(MailDetailHtmlHandler mailDetailHtmlHandler) {
-		this.mailDetailHtmlHandler = mailDetailHtmlHandler;
-	}
+    @Autowired
+    public void setMailDetailHtmlHandler(MailDetailHtmlHandler mailDetailHtmlHandler) {
+        this.mailDetailHtmlHandler = mailDetailHtmlHandler;
+    }
 
-	@Autowired
-	public void setMailDeleteHandler(MailDeleteHandler mailDeleteHandler) {
-		this.mailDeleteHandler = mailDeleteHandler;
-	}
+    @Autowired
+    public void setMailDeleteHandler(MailDeleteHandler mailDeleteHandler) {
+        this.mailDeleteHandler = mailDeleteHandler;
+    }
 
     @Autowired
     public void setDeleteHandler(DeleteHandler deleteHandler) {
         this.deleteHandler = deleteHandler;
     }
 
-	@Autowired
-	public void setMailForwardHandler(MailForwardHandler mailForwardHandler) {
-		this.mailForwardHandler = mailForwardHandler;
-	}
+    @Autowired
+    public void setRefreshHandler(RefreshHandler refreshHandler) {
+        this.refreshHandler = refreshHandler;
+    }
 
+    @Autowired
+    public void setMailForwardHandler(MailForwardHandler mailForwardHandler) {
+        this.mailForwardHandler = mailForwardHandler;
+    }
 
     @Autowired
     public void setSettings(Settings settings) {
