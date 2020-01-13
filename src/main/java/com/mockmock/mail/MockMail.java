@@ -5,6 +5,8 @@ import java.util.Date;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import com.google.common.primitives.Longs;
+
 public class MockMail implements Comparable<MockMail> {
     private long id;
     private String from;
@@ -113,5 +115,10 @@ public class MockMail implements Comparable<MockMail> {
 
     public void setReceivedTime(long receivedTime) {
         this.receivedTime = receivedTime;
+    }
+
+    @Override
+    public int hashCode() {
+        return Long.valueOf(this.receivedTime).hashCode();
     }
 }

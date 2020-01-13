@@ -11,25 +11,56 @@ $(function () {
         event.preventDefault();
     });
 
+    $('.refreshLink a.refresh').click(function (event) {
+        var newValue = !getAutoRefresh();
+        setAutoRefresh(newValue);
+        setRefreshLinkText(newValue);
+        event.preventDefault();
+    }).text(getAutoRefresh() ? 'Disable refresh' : 'Enable refresh');
+
+    function setRefreshLinkText(enabled) {
+        var text = enabled ? 'Disable refresh' : 'Enable refresh';
+        $('.refreshLink a.refresh').text(text);
+    }
+
+    setRefreshLinkText(getAutoRefresh());
+
     function checkForNewMail() {
         function checkRefresh() {
             $.ajax({
                 type: "POST",
                 url: "/mail/refresh"
-            }).done(function (timestamp) {
-                if (previousTimestamp != timestamp) {
-                    previousTimestamp = timestamp;
+            }).done(function (hashcode) {
+                if (currentHashcode != hashcode) {
+                    currentHashcode = hashcode;
                     window.location = '/';
                 }
             });
         }
 
-        setInterval(checkRefresh, 500);
-
         checkRefresh();
+        return setInterval(checkRefresh, 500);
     }
 
-    if (window.location.pathname === "/") {
-        checkForNewMail();
+    var intervalCanceller = null;
+
+    function setAutoRefresh(value) {
+        window.docCookies.setItem('autoRefresh', (value ? 'true' : 'false'));
+
+        if (value) {
+            checkForNewMail();
+        } else {
+            clearInterval(intervalCanceller);
+        }
+    }
+
+    function getAutoRefresh() {
+        var value = window.docCookies.getItem('autoRefresh');
+        var autorefresh = value != 'false';
+        return autorefresh;
+    }
+
+    if (window.location.pathname === "/" && getAutoRefresh()) {
+        intervalCanceller = checkForNewMail();
     }
 });

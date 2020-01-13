@@ -23,17 +23,12 @@ public class RefreshHandler extends BaseHandler {
             return;
         }
 
-        MockMail lastMail = this.mailQueue.getLastSendMail();
-        long timestamp = 0; // default value
-
-        if (lastMail != null) { // als er geen mail is dan halen we de timestamp niet op
-            timestamp = lastMail.getReceivedTime();
-        }
+        int hashcode = this.mailQueue.hashCode();
 
         setDefaultResponseOptions(response);
 
         response.setStatus(HttpServletResponse.SC_OK);
-        response.getWriter().write(Long.toString(timestamp));
+        response.getWriter().write(Integer.toString(hashcode));
         response.getWriter().flush();
         response.getWriter().close();
 

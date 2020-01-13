@@ -14,22 +14,30 @@ import java.util.Date;
 
 @Service
 public class MailListHtmlBuilder implements HtmlBuilder {
-    private ArrayList<MockMail> mailQueue;
+    private ArrayList<MockMail> emails;
+    private MailQueue mailQueue;
+
+    @Autowired
+    public void setMailQueue(final MailQueue mailQueue) {
+        this.mailQueue = mailQueue;
+        this.emails = mailQueue.getMailQueue();
+    }
 
     public void setMailQueue(ArrayList<MockMail> mailQueue) {
         // create a shalow copy of the mailQueue to avoid getting concurrency exceptions
-        this.mailQueue = new ArrayList<MockMail>(mailQueue);
+        this.emails = new ArrayList<MockMail>(mailQueue);
     }
 
     public String build() {
         String output = "<div class=\"container\">\n";
 
-        if (mailQueue == null || mailQueue.size() == 0) {
+        if (emails == null || emails.size() == 0) {
             output += "  <h2>No emails in queue</h2>\n";
         } else {
-            String mailText = mailQueue.size() == 1 ? "email" : "emails";
-            output += "  <h1>You have " + mailQueue.size() + " " + mailText
-                    + "! <small class=\"deleteLink\"><a class=\"delete\" href=\"/mail/delete/all\">Delete all</a></small></h1>\n";
+            String mailText = emails.size() == 1 ? "email" : "emails";
+            output += "  <h1>You have " + emails.size() + " " + mailText + "!";
+            output += "  <small class=\"deleteLink\"><a class=\"delete\" href=\"/mail/delete/all\">Delete all</a></small>\n";
+            output += "  <small class=\"refreshLink\"><a class=\"refresh\" href=\"#\">Disable refresh</a></small></h1>\n";
             output += "  <table class=\"table table-striped\">\n";
             output += "    <thead>\n";
             output += "      <th>Date received</th>\n";
@@ -40,26 +48,25 @@ public class MailListHtmlBuilder implements HtmlBuilder {
             output += "      <th>Action</th>\n";
             output += "    </thead>\n";
             output += "    <tbody>\n";
-            for (MockMail mail : mailQueue) {
+            for (MockMail mail : emails) {
                 output += buildMailRow(mail);
             }
             output += "    </tbody>\n";
             output += "  </table>\n";
         }
 
-        long lastTimeStamp = getLastTimestamp();
-
-        output += "<script type=\"text/javascript\">var previousTimestamp = '" + lastTimeStamp + "';</script>";
+        output += "<script type=\"text/javascript\">var currentHashcode = '" + this.mailQueue.hashCode()
+                + "';</script>";
         output += "</div>\n";
 
         return output;
     }
 
     private long getLastTimestamp() {
-        if (mailQueue.size() == 0)
+        if (emails.size() == 0)
             return 0;
 
-        return mailQueue.get(0).getReceivedTime();
+        return emails.get(0).getReceivedTime();
     }
 
     private String buildMailRow(MockMail mail) {

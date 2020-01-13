@@ -2,7 +2,7 @@ body {
     padding-top: 60px;
 }
 
-small.deleteLink {
+small.deleteLink, small.refreshLink {
     font-size: 12px;
 }
 
